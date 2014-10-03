@@ -239,7 +239,7 @@ module.exports = function (grunt) {
         jst: {
             compile: {
                 files: {
-                    '.tmp/scripts/templates.js': ['<%= yeoman.app %>/scripts/main/*.ejs']
+                    '.tmp/scripts/templates.js': ['<%= yeoman.app %>/scripts/**/*.ejs']
                 }
             }
         },
