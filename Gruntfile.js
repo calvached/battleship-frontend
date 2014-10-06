@@ -128,14 +128,6 @@ module.exports = function (grunt) {
                 'test/spec/{,*/}*.js'
             ]
         },
-        mocha: {
-            all: {
-                options: {
-                    run: true,
-                    urls: ['http://localhost:<%= connect.test.options.port %>/index.html']
-                }
-            }
-        },
         coffee: {
             dist: {
                 files: [{
@@ -151,7 +143,7 @@ module.exports = function (grunt) {
             test: {
                 files: [{
                     expand: true,
-                    cwd: 'test/spec',
+                    cwd: 'test/spec/',
                     src: '{,*/}*.coffee',
                     dest: '.tmp/spec',
                     ext: '.js'
@@ -299,10 +291,7 @@ module.exports = function (grunt) {
         var testTasks = [
                 'clean:server',
                 'coffee',
-                'createDefaultTemplate',
                 'jst',
-                'connect:test',
-                'mocha',
             ];
 
         if(!isConnected) {
@@ -334,5 +323,11 @@ module.exports = function (grunt) {
         'jshint',
         'test',
         'build'
+    ]);
+
+    grunt.registerTask('testForReal', [
+        'clean:server',
+        'coffee',
+        'jst'
     ]);
 };

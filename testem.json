@@ -1,7 +1,17 @@
 {
   "framework": "jasmine",
+  "before_tests": "grunt testForReal",
   "src_files": [
-    "app/hello.js",
-    "test/spec/test.js"
+    "app/bower_components/underscore/underscore.js",
+    "app/bower_components/jquery/dist/jquery.js",
+    "app/bower_components/backbone/backbone.js",
+    "app/bower_components/jasmine-jquery/lib/jasmine-jquery.js",
+    "app/lib/namespace.js",
+    "app/lib/ejs_production.js",
+    ".tmp/scripts/templates.js",
+    ".tmp/scripts/main.js",
+    ".tmp/scripts/router.js",
+    ".tmp/scripts/main/view.js",
+    ".tmp/spec/main/view_spec.js"
   ]
 }

@@ -1,7 +1,8 @@
 namespace('Main')
 
+# When this coffeescript is compiled the JS file does not know what namespace is!
+# Need to figure out a way to copy the namespace file to .tmp dir
 # make sure to compile all the view ejs files in the Gruntfile
-# Need to plug in Jasmine and start testing
 
 #class Main.Test extends Backbone.Model
 #  initialize: ->
