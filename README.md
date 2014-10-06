@@ -1,14 +1,16 @@
-# Battleship
+# Battleship (Front-end)
 An overly simplified version of Battleship created to help me get familiar with Coffeescript, Backbone, and Sinatra.
 
-## Ruby version
-Built in Ruby 2.1.1p76
-
 ## Configuration
-[Coming Soon]
+How to start the server:  
+```
+grunt serve
+```
 
 ## How to run the test suite
-[Coming Soon]
+```
+testem
+```
 
 ## Usage Instructions
 [Coming Soon]
