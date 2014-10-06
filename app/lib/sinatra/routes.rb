@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'json'
+require_relative 'board/board'
 
 before do
   content_type :json
@@ -8,7 +9,7 @@ before do
 end
 
 get '/' do
-  {:greeting => 'hello'}.to_json
+  {:greeting => 'hi'}.to_json
 end
 
 get '/get_board_size' do
