@@ -11,9 +11,3 @@ class App.Router extends Backbone.Router
 
   defaultRoute: ->
     @container.html(new Main.View().render())
-
-  #greetingView = new App.GreetingView
-  #greetingView.render()
-
-  #oneTest = new Test
-  #serverResponse = oneTest.fetch()

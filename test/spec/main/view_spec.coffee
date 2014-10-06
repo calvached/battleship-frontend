@@ -7,4 +7,4 @@ describe 'Main.View', ->
     view = new Main.View
     view.render()
 
-    expect(view.el.innerHTML).toContain('Welcome!!!')
+    expect(view.el.innerHTML).toContain('Battleship')

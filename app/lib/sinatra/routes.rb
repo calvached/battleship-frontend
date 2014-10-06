@@ -7,8 +7,12 @@ before do
           'Access-Control-Allow-Methods' => ['OPTIONS', 'GET', 'POST']
 end
 
-get '/hello' do
-  {:title => 'heyyyooo'}.to_json
+get '/' do
+  {:greeting => 'hello'}.to_json
+end
+
+get '/get_board_size' do
+  {:board_size => 5}.to_json
 end
 
 not_found do
