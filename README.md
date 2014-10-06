@@ -2,7 +2,7 @@
 An overly simplified version of Battleship created to help me get familiar with Coffeescript, Backbone, and Sinatra.
 
 ## Configuration
-How to start the server:  
+Start the server:  
 ```
 grunt serve
 ```
