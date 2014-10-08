@@ -7,7 +7,6 @@ class Board.View extends Backbone.View
 
   render: ->
     @$el.html(@template())
-    @appendGridCells()
 
   gameboard: ->
     board = new Board.Gameboard
@@ -16,7 +15,7 @@ class Board.View extends Backbone.View
   appendGridCells: ->
     console.log(@gameboard())
     console.log('appending grid cells')
-    @$el.append('<p>woooo</p>')
+    #@$el.append('<div id=0 class=hidden_card></div>')
 
 # Need to figure out how I want to display a board
 #

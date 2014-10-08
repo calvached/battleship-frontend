@@ -34,6 +34,7 @@ class Main.View extends Backbone.View
   #triggerHungry: ->
   #  @trigger('hungry')
 
-    # news up the Board.View
-    #@$('[data-id=recipes]').append(recipeView.render().el)
-    # need to render the new page at this point perhaps the board view
+# Need an event listener on each div that's part of the board
+# Perhaps a clickable class?
+# Then get the data-id number to distinguish from other divs
+
