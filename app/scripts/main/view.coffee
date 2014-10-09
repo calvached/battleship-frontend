@@ -19,7 +19,7 @@ class Main.View extends Backbone.View
   drawBoard: ->
     console.log('start game!')
     @$('[data-id=play-button]').remove()
-    @$el.append(new Board.View().render())
+    @$el.append(new Board.View().render().$el)
 
   #setListener: ->
   #  @listenTo(@view, 'blabla', @doSomething)

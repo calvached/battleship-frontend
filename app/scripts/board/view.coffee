@@ -11,17 +11,23 @@ class Board.View extends Backbone.View
   render: ->
     @appendGridCells()
     @$el.html(@template())
+    @
 
   appendGridCells: ->
     board = new Board.Gameboard
 
     board.fetch
-      success: (model, serverResponse) =>
-        _.each serverResponse, (cell, key) =>
+      success: (model, gameboard) =>
+        _.each gameboard, (cell, key) =>
           @$('[data-id=gameboard]').append("<div id=#{key} class='cell clickable' ></div>")
 
   updateBoard: (event) ->
-    console.log event.target.id
-    console.log 'cell clicked!'
-
-    # need to end the target id over to the backend to check whether hit/miss
+    $.ajax 'http://localhost:9393/player_move',
+      type: 'POST'
+      data: { player_move: event.target.id }
+      dataType: 'json'
+      error: (jqXHR, textStatus, errorThrown) ->
+        console.log "AJAX STATUS: #{textStatus}"
+      success: (serverResponse, textStatus, jqXHR) ->
+        console.log "AJAX STATUS: #{textStatus}"
+        $(event.target).removeClass( "clickable" ).addClass("#{serverResponse.status}")
