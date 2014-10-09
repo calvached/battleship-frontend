@@ -1,20 +1,35 @@
 namespace('Main')
 
-# When this coffeescript is compiled the JS file does not know what namespace is!
-# Need to figure out a way to copy the namespace file to .tmp dir
-# make sure to compile all the view ejs files in the Gruntfile
+# Views are like class Configuration
+# They generate everything that needs to be in that one particular view
+# This includes Models and Collections
+# And then just send a completed view
 
-#class Main.Test extends Backbone.Model
-#  initialize: ->
-#    console.log('Model seems to have been initialized...')
-#
-#  url: 'http://localhost:9393/hello'
+# This view will be listening to event triggered by other views
+# Conductor
 
 class Main.View extends Backbone.View
-  template: JST['app/scripts/main/view_template.ejs']
+  events:
+    "click [data-id=play-button]" : 'drawBoard'
 
   render: ->
-    @$el.html(@template())
+    @$el.append(new Banner.View().render())
+    @$el.append("<button data-id=play-button>Play Game?</button>")
 
-#oneTest = new Test
-#serverResponse = oneTest.fetch()
+  drawBoard: ->
+    console.log('start game!')
+    @$('[data-id=play-button]').remove()
+    @$el.append(new Board.View().render().$el)
+
+  #setListener: ->
+  #  @listenTo(@view, 'blabla', @doSomething)
+
+  #doSomething: ->
+  #  console.log 'triggered'
+
+  #triggerEvent: ->
+  #  @view.trigger('blabla')
+
+
+  #triggerHungry: ->
+  #  @trigger('hungry')
