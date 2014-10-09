@@ -5,24 +5,23 @@ namespace('Board')
 class Board.View extends Backbone.View
   template: JST['app/scripts/board/view_template.ejs']
 
+  events:
+    "click .clickable" : 'updateBoard'
+
   render: ->
+    @appendGridCells()
     @$el.html(@template())
 
-  gameboard: ->
-    board = new Board.Gameboard
-    board.fetch()
-
   appendGridCells: ->
-    console.log(@gameboard())
-    console.log('appending grid cells')
-    #@$el.append('<div id=0 class=hidden_card></div>')
+    board = new Board.Gameboard
 
-# Need to figure out how I want to display a board
-#
-# var images = [];
-#
-# for (var i = 1; i <= 50; i++) {
-#      images.push('<img src="lq/'+i+'.jpg" class="image-'+i+'"/>');
-# }
-#
-# $('.imagecontainer').append(images.join('\n'));
+    board.fetch
+      success: (model, serverResponse) =>
+        _.each serverResponse, (cell, key) =>
+          @$('[data-id=gameboard]').append("<div id=#{key} class='cell clickable' ></div>")
+
+  updateBoard: (event) ->
+    console.log event.target.id
+    console.log 'cell clicked!'
+
+    # need to end the target id over to the backend to check whether hit/miss
