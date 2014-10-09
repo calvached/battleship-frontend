@@ -33,8 +33,3 @@ class Main.View extends Backbone.View
 
   #triggerHungry: ->
   #  @trigger('hungry')
-
-# Need an event listener on each div that's part of the board
-# Perhaps a clickable class?
-# Then get the data-id number to distinguish from other divs
-
