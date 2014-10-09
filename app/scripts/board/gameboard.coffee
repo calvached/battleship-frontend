@@ -7,4 +7,4 @@ class Board.Gameboard extends Backbone.Model
   initialize: ->
     console.log('Model seems to have been initialized...')
 
-  url: 'http://localhost:9393/start_game'
+  url: 'http://localhost:9393/current_board'
