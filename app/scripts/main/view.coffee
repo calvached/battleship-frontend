@@ -1,13 +1,5 @@
 namespace('Main')
 
-# Views are like class Configuration
-# They generate everything that needs to be in that one particular view
-# This includes Models and Collections
-# And then just send a completed view
-
-# This view will be listening to event triggered by other views
-# Conductor
-
 class Main.View extends Backbone.View
   events:
     "click [data-id=play-button]" : 'drawBoard'
@@ -20,16 +12,3 @@ class Main.View extends Backbone.View
     console.log('start game!')
     @$('[data-id=play-button]').remove()
     @$el.append(new Board.View().render().$el)
-
-  #setListener: ->
-  #  @listenTo(@view, 'blabla', @doSomething)
-
-  #doSomething: ->
-  #  console.log 'triggered'
-
-  #triggerEvent: ->
-  #  @view.trigger('blabla')
-
-
-  #triggerHungry: ->
-  #  @trigger('hungry')

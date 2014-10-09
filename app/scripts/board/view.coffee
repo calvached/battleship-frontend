@@ -1,7 +1,5 @@
 namespace('Board')
 
-# This view news up the Board model so that it can get a board and generate the HTML to display it.
-
 class Board.View extends Backbone.View
   template: JST['app/scripts/board/view_template.ejs']
 
