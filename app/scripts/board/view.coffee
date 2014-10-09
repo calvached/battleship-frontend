@@ -24,7 +24,7 @@ class Board.View extends Backbone.View
   updateBoard: (event) ->
     $.ajax 'http://localhost:9393/player_move',
       type: 'POST'
-      data: { player_move: event.target.id }
+      data: { move: event.target.id }
       dataType: 'json'
       error: (jqXHR, textStatus, errorThrown) ->
         console.log "AJAX STATUS: #{textStatus}"
