@@ -40,6 +40,10 @@ module.exports = function (grunt) {
                 files: ['test/spec/{,*/}*.coffee'],
                 tasks: ['coffee:test']
             },
+            css: {
+               files: '**/*.scss',
+               tasks: ['sass:dist']
+            },
             livereload: {
                 options: {
                     livereload: grunt.option('livereloadport') || LIVERELOAD_PORT
@@ -128,11 +132,20 @@ module.exports = function (grunt) {
                 'test/spec/{,*/}*.js'
             ]
         },
+        sass: {
+          dist: {
+            files: [{
+              expand: true,
+              cwd: '<%= yeoman.app %>/styles',
+              src: '{,*/}*.scss',
+              dest: '.tmp/styles',
+              ext: '.css'
+            }]
+          }
+        },
         coffee: {
             dist: {
                 files: [{
-                    // rather than compiling multiple files here you should
-                    // require them into your main .coffee file
                     expand: true,
                     cwd: '<%= yeoman.app %>/scripts',
                     src: '{,*/}*.coffee',
@@ -150,6 +163,7 @@ module.exports = function (grunt) {
                 }]
             }
         },
+
         // not enabled since usemin task does concat and uglify
         // check index.html to edit your build targets
         // enable this task if you prefer defining your build targets here
@@ -278,6 +292,7 @@ module.exports = function (grunt) {
         grunt.task.run([
             'clean:server',
             'coffee:dist',
+            'sass:dist',
             'createDefaultTemplate',
             'jst',
             'connect:livereload',
