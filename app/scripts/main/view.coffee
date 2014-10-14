@@ -52,7 +52,7 @@ class Main.View extends Backbone.View
     @drawBoard()
 
   removeForm: ->
-    @$('[data-id=board-size-form]').remove()
+    $('[data-id=board-size-form]').remove()
 
   drawBoard: ->
     console.log('start game!')
