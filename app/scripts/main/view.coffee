@@ -12,20 +12,6 @@ class Main.View extends Backbone.View
     @$el.append("<input type=text name=board-size><br>")
     @$el.append("<button data-id=play-button>Play Game?</button>")
 
-  renderGameboard: ->
-    @removeButton()
-    @removeInputField()
-    @drawBoard()
-
-  submitBoardSize: (boardSize) ->
-    $.ajax 'http://localhost:9393/board_size',
-      type: 'POST'
-      data: { board_size: boardSize }
-      dataType: 'json'
-      error: => console.log 'Error!'
-      success: (response, textStatus, _) =>
-        console.log response
-
   validateValue: ->
     boardSize = @$('[name=board-size]').val()
 
@@ -36,7 +22,21 @@ class Main.View extends Backbone.View
       @$('[name=board-size]').val("")
 
   isValid: (boardSize) ->
-    boardSize < 10 && boardSize > 4 && $.isNumeric(boardSize)
+    boardSize < 11 && boardSize > 3 && $.isNumeric(boardSize)
+
+  submitBoardSize: (boardSize) ->
+    $.ajax 'http://localhost:9393/board_size',
+      type: 'POST'
+      data: { board_size: boardSize }
+      dataType: 'json'
+      error: => console.log 'Error!'
+      success: (response, textStatus, _) =>
+        console.log response
+
+  renderGameboard: ->
+    @removeButton()
+    @removeInputField()
+    @drawBoard()
 
   removeInputField: ->
     @$('p').remove()
