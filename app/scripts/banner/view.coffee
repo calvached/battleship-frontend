@@ -1,6 +1,6 @@
-namespace('Banner')
+namespace('Intro')
 
-class Banner.View extends Backbone.View
+class Intro.View extends Backbone.View
   template: JST['app/scripts/banner/view_template.ejs']
 
   render: ->
