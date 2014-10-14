@@ -10,8 +10,7 @@ class App.Router extends Backbone.Router
   container: $("[data-id=container]")
 
   defaultRoute: ->
-    console.log('You are on the default page')
-    @container.html(new Main.View().render())
+    @container.html(new Main.View().render().el)
 
   #makeModel: ->
   #  oneTest = new Board.Current

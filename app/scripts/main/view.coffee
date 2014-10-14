@@ -8,7 +8,7 @@ class Main.View extends Backbone.View
     # need to figure out how to have el attach to an element already in existence instead of creating a new div each time.
     introView = new Intro.View().render()
     @$el.append(introView)
-    # @
+    @
 
   invalidMsgElem: $('[data-id=invalid-message]')
 
