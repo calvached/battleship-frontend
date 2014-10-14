@@ -14,6 +14,15 @@ class Board.View extends Backbone.View
     @fetchGameboard()
     @
 
+  updateBoard: (event) ->
+    $.ajax 'http://localhost:9393/player_move',
+      type: 'POST'
+      data: { move: event.target.id }
+      dataType: 'json'
+      error: @errorCallback
+      success: (response, textStatus, _) =>
+        @successCallback(response, textStatus, event.target)
+
   fetchGameboard: ->
     board = new Board.Gameboard
 
@@ -23,17 +32,8 @@ class Board.View extends Backbone.View
 
   appendGridCells: (gameboard) ->
     _.each gameboard, (cell, key) =>
-      $('[data-id=gameboard]').append("<div id=#{key} class='cell clickable' ></div>")
+      $('[data-id=gameboard]').append("<div id=#{key} class='cell clickable'></div>")
       #@gameboardElem.append("<div id=#{key} class='cell clickable' ></div>")
-
-  updateBoard: (event) ->
-    $.ajax 'http://localhost:9393/player_move',
-      type: 'POST'
-      data: { move: event.target.id }
-      dataType: 'json'
-      error: @errorCallback
-      success: (response, textStatus, _) =>
-        @successCallback(response, textStatus, event.target)
 
   errorCallback: (_, textStatus) ->
     # create a div for error
