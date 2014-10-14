@@ -32,3 +32,15 @@ body {
   border-radius: 5px;
   display: table;
 }
+
+.alert {
+  display: none;
+  font-size: 150%;
+  color: red;
+}
+
+.error-message {
+}
+
+.invalid-input-message {
+}
