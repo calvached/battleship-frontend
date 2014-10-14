@@ -7,21 +7,22 @@ class Board.View extends Backbone.View
     "click .clickable" : 'updateBoard'
     # test by 'clicking'
 
-  #gameboardElem: $('[data-id=gameboard]')
-
   render: ->
     @$el.html(@template())
     @fetchGameboard()
     @
+
+  #gameboardElem: $('[data-id=gameboard]')
 
   updateBoard: (event) ->
     $.ajax 'http://localhost:9393/player_move',
       type: 'POST'
       data: { move: event.target.id }
       dataType: 'json'
-      error: @errorCallback
-      success: (response, textStatus, _) =>
-        @successCallback(response, textStatus, event.target)
+      error: => @errorCallback()
+      success: (response, _) =>
+        $('[data-id=flash-error]').fadeOut()
+        @successCallback(response, event.target)
 
   fetchGameboard: ->
     board = new Board.Gameboard
@@ -33,15 +34,12 @@ class Board.View extends Backbone.View
   appendGridCells: (gameboard) ->
     _.each gameboard, (cell, key) =>
       $('[data-id=gameboard]').append("<div id=#{key} class='cell clickable'></div>")
-      #@gameboardElem.append("<div id=#{key} class='cell clickable' ></div>")
+      #@gameboardElem.append("<div id=#{key} class='cell clickable'></div>")
 
-  errorCallback: (_, textStatus) ->
-    # create a div for error
-    console.log "AJAX STATUS: #{textStatus}"
+  errorCallback: ->
+    $('[data-id=flash-error]').fadeIn()
 
-  successCallback: (response, textStatus, gridCell) ->
-    console.log "AJAX STATUS: #{textStatus}"
-
+  successCallback: (response, gridCell) ->
     @removeClickableClass(gridCell)
     @updateCellColor(gridCell, response.moveStatus)
     @renderAnnouncement(response.announcement)
