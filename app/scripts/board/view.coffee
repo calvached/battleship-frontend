@@ -12,7 +12,7 @@ class Board.View extends Backbone.View
     @fetchGameboard()
     @
 
-  #gameboardElem: $('[data-id=gameboard]')
+  gameboardElem: -> $('[data-id=gameboard]')
 
   updateBoard: (event) ->
     $.ajax 'http://localhost:9393/player_move',
@@ -33,8 +33,7 @@ class Board.View extends Backbone.View
 
   appendGridCells: (gameboard) ->
     _.each gameboard, (cell, key) =>
-      $('[data-id=gameboard]').append("<div id=#{key} class='cell clickable'></div>")
-      #@gameboardElem.append("<div id=#{key} class='cell clickable'></div>")
+      @gameboardElem().append("<div id=#{key} class='cell clickable'></div>")
 
   errorCallback: ->
     $('[data-id=flash-error]').fadeIn()
