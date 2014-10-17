@@ -6,12 +6,16 @@
     "app/bower_components/jquery/dist/jquery.js",
     "app/bower_components/backbone/backbone.js",
     "app/bower_components/jasmine-jquery/lib/jasmine-jquery.js",
+    "app/bower_components/sinon/index.js",
     "app/lib/namespace.js",
     "app/lib/ejs_production.js",
     ".tmp/scripts/templates.js",
     ".tmp/scripts/main.js",
     ".tmp/scripts/router.js",
     ".tmp/scripts/main/view.js",
-    ".tmp/spec/main/view_spec.js"
+    ".tmp/spec/main/view_spec.js",
+    ".tmp/scripts/intro/view.js",
+    ".tmp/scripts/board/view_spec.js",
+    ".tmp/spec/board/view_spec.js"
   ]
 }
