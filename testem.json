@@ -13,9 +13,9 @@
     ".tmp/scripts/main.js",
     ".tmp/scripts/router.js",
     ".tmp/scripts/main/view.js",
-    ".tmp/spec/main/view_spec.js",
-    ".tmp/scripts/intro/view.js",
-    ".tmp/scripts/board/view_spec.js",
-    ".tmp/spec/board/view_spec.js"
+    ".tmp/scripts/setup/view.js",
+    ".tmp/scripts/board/view.js",
+    ".tmp/scripts/board/gameboard.js",
+    ".tmp/spec/**/*.js"
   ]
 }

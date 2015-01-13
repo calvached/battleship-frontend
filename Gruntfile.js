@@ -40,8 +40,9 @@ module.exports = function (grunt) {
                 files: ['test/spec/{,*/}*.coffee'],
                 tasks: ['coffee:test']
             },
-            css: {
-               files: '**/*.scss',
+            sass: {
+               //files: '**/*.scss',
+               files: ['<%= yeoman.app %>/styles/{,*/}*.scss'],
                tasks: ['sass:dist']
             },
             livereload: {
@@ -133,15 +134,15 @@ module.exports = function (grunt) {
             ]
         },
         sass: {
-          dist: {
-            files: [{
-              expand: true,
-              cwd: '<%= yeoman.app %>/styles',
-              src: '{,*/}*.scss',
-              dest: '.tmp/styles',
-              ext: '.css'
-            }]
-          }
+            dist: {
+              files: [{
+                expand: true,
+                cwd: '<%= yeoman.app %>/styles',
+                src: '{,*/}*.scss',
+                dest: '.tmp/styles',
+                ext: '.css'
+              }]
+            }
         },
         coffee: {
             dist: {
@@ -281,6 +282,7 @@ module.exports = function (grunt) {
             return grunt.task.run([
                 'clean:server',
                 'coffee',
+                'sass',
                 'createDefaultTemplate',
                 'jst',
                 'connect:test',
@@ -306,6 +308,7 @@ module.exports = function (grunt) {
         var testTasks = [
                 'clean:server',
                 'coffee',
+                'sass',
                 'jst',
             ];
 
@@ -321,6 +324,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:dist',
         'coffee',
+        'sass',
         'createDefaultTemplate',
         'jst',
         'useminPrepare',
@@ -343,6 +347,7 @@ module.exports = function (grunt) {
     grunt.registerTask('testForReal', [
         'clean:server',
         'coffee',
+        'sass',
         'jst'
     ]);
 };

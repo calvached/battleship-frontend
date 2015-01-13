@@ -5,14 +5,14 @@ class Board.View extends Backbone.View
 
   events:
     "click .clickable" : 'updateBoard'
-    # test by 'clicking'
 
   render: ->
-    @$el.html(@template())
-    @fetchGameboard()
+    @appendGridCells()
     @
 
-  gameboardElem: -> $('[data-id=gameboard]')
+  gameboardElem: -> @$("[data-id=gameboard]")
+
+  feedbackElem: -> @$("[data-id=feedback]")
 
   updateBoard: (event) ->
     $.ajax 'http://localhost:9393/player_move',
@@ -24,24 +24,33 @@ class Board.View extends Backbone.View
         $('[data-id=flash-error]').fadeOut()
         @successCallback(response, event.target)
 
-  fetchGameboard: ->
-    board = new Board.Gameboard
+  appendGridCells: ->
+    # options is not showing up
+    console.log @options
+    boardDimension = Math.sqrt(_.keys(@options.gameboard).length)
 
-    board.fetch
-      success: (model, gameboard) =>
-        @appendGridCells(gameboard)
+    _(boardDimension).times (rowIndex) =>
+      @gameboardElem().append("<tr data-id=row#{rowIndex + 1}></tr>")
+      @appendDataColumn(rowIndex + 1, boardDimension)
 
-  appendGridCells: (gameboard) ->
-    _.each gameboard, (cell, key) =>
-      @gameboardElem().append("<div id=#{key} class='cell clickable'></div>")
+  appendDataColumn: (rowIndex, boardDimension) ->
+    _(boardDimension).times (columnIndex) =>
+
+      columnNumber = ((rowIndex - 1) * boardDimension) + columnIndex
+
+      @$("[data-id=row#{rowIndex}]").append("<td data-id=col#{columnNumber + 1} class='cell clickable'></td>")
 
   errorCallback: ->
     $('[data-id=flash-error]').fadeIn()
 
   successCallback: (response, gridCell) ->
     @removeClickableClass(gridCell)
-    @updateCellColor(gridCell, response.moveStatus)
-    @renderAnnouncement(response.announcement)
+    @updateCellColor(gridCell, response.hitOrMiss)
+
+    if response.shipName
+      @renderShipName(response.shipName)
+    else
+      @renderHint(response.hint)
 
   removeClickableClass: (gridCell) ->
     $(gridCell).removeClass("clickable")
@@ -49,5 +58,8 @@ class Board.View extends Backbone.View
   updateCellColor: (gridCell, moveStatus) ->
     $(gridCell).addClass("#{moveStatus}")
 
-  renderAnnouncement: (announcement) ->
-    $('[data-id=announcement]').html("#{announcement}")
+  renderHint: (hint) ->
+    @feedbackElem().html("#{hint}")
+
+  renderShipName: (name) ->
+    @feedbackElem().html("You have hit my #{name}!")
