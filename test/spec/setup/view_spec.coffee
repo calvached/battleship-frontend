@@ -1,81 +1,100 @@
 describe 'Setup.View', ->
+  fakeServer = null
+
   renderSetup = ->
     _v = new Setup.View
       errorElem: $('<div data-id=error-message></div>')
+      boardModel: new Gameboard.Model(boardModel: {})
     _v.render()
     _v
 
-  it 'throws an error message when board size is less than 4', ->
-    view = renderSetup()
+  errorPostData = -> { errorMsg: "Invalid input. Please enter a number from 4 - 10." }
 
-    view.$('[data-id=board-size]').val('3')
-    view.$('[data-id=play-button]').click()
+  successPostData = -> {
+                         gameboard: {
+                            '1': '', '2': '', '3': '', '4': '',
+                            '5': '', '6': '', '7': '', '8': '',
+                            '9': '', '10': '', '11': '', '12': '',
+                            '13': '', '14': '', '15': '', '16': ''
+                          }
+                       }
 
-    expect(view.options.errorElem.html()).toContain(view.invalidInputText)
+  beforeEach ->
+    fakeServer = sinon.fakeServer.create()
 
-  it 'throws an error message when board size is greater than 10', ->
-    view = renderSetup()
+  afterEach ->
+    fakeServer.restore()
 
-    view.$('[data-id=board-size]').val('11')
-    view.$('[data-id=play-button]').click()
+  it 'posts the gameboard size', ->
+    fakeServer.respondWith('POST', 'http://localhost:9393/board_size', [200, { "Content-Type": "application/json" }, JSON.stringify({})])
 
-    expect(view.options.errorElem.html()).toContain(view.invalidInputText)
-
-  it 'does not throw an error when board size is 4', ->
-    view = renderSetup()
-
-    view.$('[data-id=board-size]').val('4')
-    view.$('[data-id=play-button]').click()
-
-    expect(view.options.errorElem.is(':empty')).toBeTruthy()
-
-  it 'does not throw an error when board size is between 4 and 10', ->
     view = renderSetup()
 
     view.$('[data-id=board-size]').val('6')
     view.$('[data-id=play-button]').click()
+    fakeServer.respond()
 
-    expect(view.options.errorElem.is(':empty')).toBeTruthy()
+    postedData = fakeServer.requests[0].requestBody
 
-  it 'does not throw an error when board size is 10', ->
+    expect(postedData).toEqual('board_size=6')
+
+  it 'throws an error on an unsuccessful post', ->
     view = renderSetup()
 
-    view.$('[data-id=board-size]').val('10')
+    view.$('[data-id=board-size]').val('6')
     view.$('[data-id=play-button]').click()
+    fakeServer.respond()
 
-    expect(view.options.errorElem.is(':empty')).toBeTruthy()
+    expect(view.options.errorElem.html()).toContain(view.postFailure)
 
-  it 'clears the error message after 3 seconds', ->
-    jasmine.Clock.useMock()
+  it 'throws an error message if one exists after a post', ->
+    fakeServer.respondWith('POST', 'http://localhost:9393/board_size', [200, { "Content-Type": "application/json" }, JSON.stringify(errorPostData())])
+
     view = renderSetup()
 
     view.$('[data-id=board-size]').val('3')
     view.$('[data-id=play-button]').click()
+    fakeServer.respond()
 
-    expect(view.options.errorElem.html()).toContain(view.invalidInputText)
+    expect(view.options.errorElem.html()).toContain(errorPostData().errorMsg)
+
+  it 'clears the error message after 3 seconds', ->
+    jasmine.Clock.useMock()
+    fakeServer.respondWith('POST', 'http://localhost:9393/board_size', [200, { "Content-Type": "application/json" }, JSON.stringify(errorPostData())])
+
+    view = renderSetup()
+
+    view.$('[data-id=board-size]').val('3')
+    view.$('[data-id=play-button]').click()
+    fakeServer.respond()
+
+    expect(view.options.errorElem.html()).toContain(errorPostData().errorMsg)
 
     jasmine.Clock.tick(3000)
 
     expect(view.options.errorElem.is(':empty')).toBeTruthy()
 
-  xit 'posts the gameboard size', ->
+  it 'does not throw an error message if it does not exist', ->
+    fakeServer.respondWith('POST', 'http://localhost:9393/board_size', [200, { "Content-Type": "application/json" }, JSON.stringify({})])
+
     view = renderSetup()
 
     view.$('[data-id=board-size]').val('4')
     view.$('[data-id=play-button]').click()
+    fakeServer.respond()
 
-    server = sinon.fakeServer.create()
-    server.respondWith('GET', 'http://localhost:9393/board_size', [200, { "Content-Type": "application/json" }, JSON.stringify({})])
-  #  expect successfullCallback to have been called
-  #
-  submitBoardSize: (boardSize) ->
-    $.ajax 'http://localhost:9393/board_size',
-      type: 'POST'
-      xhrFields: {
-        withCredentials: true
-      }
-      data: { board_size: boardSize }
-      dataType: 'json'
-      error: => @errorCallback()
-      success: (response, _) =>
-        @successCallback()
+    expect(view.options.errorElem.is(':empty')).toBeTruthy()
+
+  it 'executes a trigger', ->
+    fakeListener = spyOn(Backbone, 'View')
+    testModel = spyOn(Backbone, 'Model')
+    fakeServer.respondWith('POST', 'http://localhost:9393/board_size', [200, { "Content-Type": "application/json" }, JSON.stringify(successPostData())])
+
+    view = renderSetup()
+    view.listenTo(view, 'setupComplete', fakeListener)
+
+    view.$('[data-id=board-size]').val('4')
+    view.$('[data-id=play-button]').click()
+    fakeServer.respond()
+
+    expect(fakeListener).toHaveBeenCalled()

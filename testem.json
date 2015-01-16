@@ -15,7 +15,7 @@
     ".tmp/scripts/main/view.js",
     ".tmp/scripts/setup/view.js",
     ".tmp/scripts/board/view.js",
-    ".tmp/scripts/board/gameboard.js",
+    ".tmp/scripts/gameboard/gameboard_model.js",
     ".tmp/spec/**/*.js"
   ]
 }
