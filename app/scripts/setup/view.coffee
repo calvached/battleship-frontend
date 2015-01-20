@@ -31,7 +31,6 @@ class Setup.View extends Backbone.View
       error: => @errorCallback()
       success: (response, _) =>
         @successCallback(response)
-  # test that all data is being sent to the backend (xhrFields, data, dataType, etc)
 
   successCallback: (response) ->
     @resetInput()

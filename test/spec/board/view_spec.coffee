@@ -1,11 +1,11 @@
 describe 'Board.View', ->
   mockGameboardModel = ->
-    board = new Board.Gameboard
-      gameboard: {
+    board = new Gameboard.Model
+      board: {
                    "1": '', "2": '', "3": '', "4": '',
                    "5": '', "6": '', "7": '', "8": '',
                    "9": '', "10": '', "11": '', "12": '',
-                   "13": '', "14": '', "15": '', "16": '',
+                   "13": '', "14": '', "15": '', "16": ''
                  }
     board
 
@@ -15,13 +15,11 @@ describe 'Board.View', ->
     _v.render()
     _v
 
-
-  xit 'renders an empty board', ->
+  it 'renders an empty board', ->
     board = renderView()
 
-    console.log board.$('[data-id=row1]')
-    expect(board.$('[data-id=row1]')).toExist()
-    expect(board.$('[data-id=col1]')).toExist()
+    expect(board.$el.html()).toContain(board.$('[data-id=row1]').html())
+    expect(board.$el.html()).toContain(board.$('[data-id=col1]').html())
 
   xit 'updates a board', ->
     #board.@$('[data-id=col1]').click()

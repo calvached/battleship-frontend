@@ -7,12 +7,15 @@ class Board.View extends Backbone.View
     "click .clickable" : 'updateBoard'
 
   render: ->
+    @$el.html(@template)
     @appendGridCells()
     @
 
   gameboardElem: -> @$("[data-id=gameboard]")
 
   feedbackElem: -> @$("[data-id=feedback]")
+
+  boardData: -> @options.boardModel.get('board')
 
   updateBoard: (event) ->
     $.ajax 'http://localhost:9393/player_move',
@@ -25,9 +28,7 @@ class Board.View extends Backbone.View
         @successCallback(response, event.target)
 
   appendGridCells: ->
-    # options is not showing up
-    console.log @options
-    boardDimension = Math.sqrt(_.keys(@options.gameboard).length)
+    boardDimension = Math.sqrt(_.keys(@boardData()).length)
 
     _(boardDimension).times (rowIndex) =>
       @gameboardElem().append("<tr data-id=row#{rowIndex + 1}></tr>")

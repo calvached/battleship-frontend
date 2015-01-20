@@ -24,5 +24,7 @@ class Main.View extends Backbone.View
     @listenTo(setup, 'setupComplete', @renderGameboard)
 
   renderGameboard: ->
-    console.log 'this is a board'
-    console.log @gameboard.get('board')
+    board = new Board.View
+      boardModel: @gameboard
+
+    @contentElem().html(board.render().$el)

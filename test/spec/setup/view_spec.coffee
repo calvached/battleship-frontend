@@ -4,7 +4,7 @@ describe 'Setup.View', ->
   renderSetup = ->
     _v = new Setup.View
       errorElem: $('<div data-id=error-message></div>')
-      boardModel: new Gameboard.Model(boardModel: {})
+      boardModel: new Gameboard.Model(board: {})
     _v.render()
     _v
 
