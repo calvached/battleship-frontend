@@ -12,7 +12,7 @@
     ".tmp/scripts/templates.js",
     ".tmp/scripts/main.js",
     ".tmp/scripts/router.js",
-    ".tmp/scripts/main/view.js",
+    ".tmp/scripts/game/view.js",
     ".tmp/scripts/setup/view.js",
     ".tmp/scripts/board/view.js",
     ".tmp/scripts/gameboard/gameboard_model.js",

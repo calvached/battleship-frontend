@@ -10,7 +10,7 @@ class Setup.View extends Backbone.View
     @$el.html(@template())
     @
 
-  postFailure: 'Gameboard size POST failed.'
+  errorDuration: 3000
 
   errorElem: -> @options.errorElem
 
@@ -21,31 +21,35 @@ class Setup.View extends Backbone.View
 
   submitBoardSize: (boardSize) ->
     @clearElem()
-    $.ajax 'http://localhost:9393/board_size',
+    $.ajax 'http://localhost:9393/new_game',
+    #@boardModel().fetch
       type: 'POST'
       xhrFields: {
         withCredentials: true
       }
       data: @boardSizeData()
       dataType: 'json'
-      error: => @errorCallback()
-      success: (response, _) =>
-        @successCallback(response)
+      error: (response, _) => @errorCallback(response)
+      success: (response, _) => @successCallback(response)
 
   successCallback: (response) ->
+    @updateBoardModel(response.gameboard)
+    @trigger('setupComplete')
+
+  errorCallback: (response) ->
     @resetInput()
-    if response.errorMsg
-      @renderErrorMsg(response.errorMsg)
+
+    if response.responseText
+      @renderErrorMsg(response.responseText)
     else
-      @updateBoardModel(response.gameboard)
-      @trigger('setupComplete')
+      @renderErrorMsg(response.statusText)
 
   updateBoardModel: (freshBoard) ->
     @boardModel().set('board': freshBoard)
 
   renderErrorMsg: (errorMsg) ->
     @errorElem().html("<div>#{errorMsg}</div>")
-    setTimeout(@clearElem, 3000)
+    setTimeout(@clearElem, @errorDuration)
 
   clearElem: =>
     @errorElem().text('')
@@ -55,6 +59,3 @@ class Setup.View extends Backbone.View
 
   resetInput: ->
     @$('[data-id=board-size]').val("")
-
-  errorCallback: ->
-    @renderErrorMsg(@postFailure)

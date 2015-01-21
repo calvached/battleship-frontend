@@ -8,7 +8,7 @@ describe 'Setup.View', ->
     _v.render()
     _v
 
-  errorPostData = -> { errorMsg: "Invalid input. Please enter a number from 4 - 10." }
+  errorPostData = -> "error"
 
   successPostData = -> {
                          gameboard: {
@@ -26,7 +26,7 @@ describe 'Setup.View', ->
     fakeServer.restore()
 
   it 'posts the gameboard size', ->
-    fakeServer.respondWith('POST', 'http://localhost:9393/board_size', [200, { "Content-Type": "application/json" }, JSON.stringify({})])
+    fakeServer.respondWith('POST', 'http://localhost:9393/new_game', [200, { "Content-Type": "application/json" }, JSON.stringify({})])
 
     view = renderSetup()
 
@@ -45,22 +45,21 @@ describe 'Setup.View', ->
     view.$('[data-id=play-button]').click()
     fakeServer.respond()
 
-    expect(view.options.errorElem.html()).toContain(view.postFailure)
+    expect(view.options.errorElem.html()).toContain('Not Found')
 
-  it 'throws an error message if one exists after a post', ->
-    fakeServer.respondWith('POST', 'http://localhost:9393/board_size', [200, { "Content-Type": "application/json" }, JSON.stringify(errorPostData())])
-
+  it 'throws an error message on an invalid post', ->
+    fakeServer.respondWith('POST', 'http://localhost:9393/new_game', [403, { "Content-Type": "application/json" }, JSON.stringify(errorPostData())])
     view = renderSetup()
 
     view.$('[data-id=board-size]').val('3')
     view.$('[data-id=play-button]').click()
     fakeServer.respond()
 
-    expect(view.options.errorElem.html()).toContain(errorPostData().errorMsg)
+    expect(view.options.errorElem.html()).toContain(errorPostData())
 
   it 'clears the error message after 3 seconds', ->
     jasmine.Clock.useMock()
-    fakeServer.respondWith('POST', 'http://localhost:9393/board_size', [200, { "Content-Type": "application/json" }, JSON.stringify(errorPostData())])
+    fakeServer.respondWith('POST', 'http://localhost:9393/new_game', [403, { "Content-Type": "application/json" }, JSON.stringify(errorPostData())])
 
     view = renderSetup()
 
@@ -68,14 +67,14 @@ describe 'Setup.View', ->
     view.$('[data-id=play-button]').click()
     fakeServer.respond()
 
-    expect(view.options.errorElem.html()).toContain(errorPostData().errorMsg)
+    expect(view.options.errorElem.html()).toContain(errorPostData())
 
     jasmine.Clock.tick(3000)
 
     expect(view.options.errorElem.is(':empty')).toBeTruthy()
 
   it 'does not throw an error message if it does not exist', ->
-    fakeServer.respondWith('POST', 'http://localhost:9393/board_size', [200, { "Content-Type": "application/json" }, JSON.stringify({})])
+    fakeServer.respondWith('POST', 'http://localhost:9393/new_game', [200, { "Content-Type": "application/json" }, JSON.stringify({})])
 
     view = renderSetup()
 
@@ -88,7 +87,7 @@ describe 'Setup.View', ->
   it 'executes a trigger', ->
     fakeListener = spyOn(Backbone, 'View')
     testModel = spyOn(Backbone, 'Model')
-    fakeServer.respondWith('POST', 'http://localhost:9393/board_size', [200, { "Content-Type": "application/json" }, JSON.stringify(successPostData())])
+    fakeServer.respondWith('POST', 'http://localhost:9393/new_game', [200, { "Content-Type": "application/json" }, JSON.stringify(successPostData())])
 
     view = renderSetup()
     view.listenTo(view, 'setupComplete', fakeListener)
