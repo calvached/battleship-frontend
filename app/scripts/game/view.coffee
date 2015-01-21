@@ -1,7 +1,7 @@
-namespace('Main')
+namespace('Game')
 
-class Main.View extends Backbone.View
-  template: JST['app/scripts/main/view_template.ejs']
+class Game.View extends Backbone.View
+  template: JST['app/scripts/game/view_template.ejs']
 
   contentElem: -> @$('[data-id=content]')
 
@@ -11,6 +11,7 @@ class Main.View extends Backbone.View
     @$el.html(@template)
     @gameboard = new Gameboard.Model
       board: {}
+      # Gameboard.Model have return {}
 
     @renderSetup()
     @
