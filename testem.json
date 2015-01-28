@@ -1,5 +1,6 @@
 {
   "framework": "jasmine",
+  "launch_in_ci": ["PhantomJS"],
   "before_tests": "grunt testForReal",
   "src_files": [
     "app/bower_components/underscore/underscore.js",
@@ -10,12 +11,13 @@
     "app/lib/namespace.js",
     "app/lib/ejs_production.js",
     ".tmp/scripts/templates.js",
+    ".tmp/scripts/game/board_collection.js",
+    ".tmp/scripts/game/cell_model.js",
     ".tmp/scripts/main.js",
     ".tmp/scripts/router.js",
     ".tmp/scripts/game/view.js",
     ".tmp/scripts/setup/view.js",
     ".tmp/scripts/board/view.js",
-    ".tmp/scripts/gameboard/gameboard_model.js",
     ".tmp/spec/**/*.js"
   ]
 }
