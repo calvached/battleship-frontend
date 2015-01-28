@@ -1,17 +1,17 @@
 describe 'Board.View', ->
-  mockGameboardModel = ->
-    board = new Gameboard.Model
-      board: {
-                   "1": '', "2": '', "3": '', "4": '',
-                   "5": '', "6": '', "7": '', "8": '',
-                   "9": '', "10": '', "11": '', "12": '',
-                   "13": '', "14": '', "15": '', "16": ''
-                 }
+  mockGameboard = ->
+    board = new Game.BoardCollection([
+      new Game.CellModel, new Game.CellModel, new Game.CellModel,new Game.CellModel,
+      new Game.CellModel, new Game.CellModel, new Game.CellModel, new Game.CellModel,
+      new Game.CellModel, new Game.CellModel, new Game.CellModel, new Game.CellModel,
+      new Game.CellModel, new Game.CellModel, new Game.CellModel, new Game.CellModel
+    ])
+
     board
 
   renderView = ->
     _v = new Board.View
-      boardModel: mockGameboardModel()
+      board: mockGameboard()
     _v.render()
     _v
 
@@ -20,9 +20,3 @@ describe 'Board.View', ->
 
     expect(board.$el.html()).toContain(board.$('[data-id=row1]').html())
     expect(board.$el.html()).toContain(board.$('[data-id=col1]').html())
-
-  xit 'updates a board', ->
-    #board.@$('[data-id=col1]').click()
-
-  xit 'posts the grid cell number', ->
-    # expect the successCallback to have been called

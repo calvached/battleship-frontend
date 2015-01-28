@@ -9,23 +9,20 @@ class Game.View extends Backbone.View
 
   render: ->
     @$el.html(@template)
-    @gameboard = new Gameboard.Model
-      board: {}
-      # Gameboard.Model have return {}
-
+    @board = new Game.BoardCollection
     @renderSetup()
     @
 
   renderSetup: ->
     setup = new Setup.View
       errorElem: @errorElem()
-      boardModel: @gameboard
+      board: @board
 
     @contentElem().html(setup.render().$el)
     @listenTo(setup, 'setupComplete', @renderGameboard)
 
   renderGameboard: ->
-    board = new Board.View
-      boardModel: @gameboard
+    gameboard = new Board.View
+      board: @board
 
-    @contentElem().html(board.render().$el)
+    @contentElem().html(gameboard.render().$el)
