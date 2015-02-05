@@ -1,7 +1,7 @@
-namespace('Setup')
+namespace('Battleship.Setup')
 
-class Setup.View extends Backbone.View
-  template: JST['app/scripts/setup/view_template.ejs']
+class Battleship.Setup.View extends Backbone.View
+  template: JST['app/scripts/battleship/setup/view_template.ejs']
 
   events:
     "click [data-id=play-button]" : 'submitBoardSize'

@@ -1,7 +1,7 @@
-namespace('Game')
+namespace('Battleship.Game')
 
-class Game.View extends Backbone.View
-  template: JST['app/scripts/game/view_template.ejs']
+class Battleship.Game.View extends Backbone.View
+  template: JST['app/scripts/battleship/game/view_template.ejs']
 
   contentElem: -> @$('[data-id=content]')
 
@@ -9,12 +9,12 @@ class Game.View extends Backbone.View
 
   render: ->
     @$el.html(@template)
-    @board = new Game.BoardCollection
+    @board = new Battleship.Board.Collection
     @renderSetup()
     @
 
   renderSetup: ->
-    setup = new Setup.View
+    setup = new Battleship.Setup.View
       errorElem: @errorElem()
       board: @board
 
@@ -22,7 +22,7 @@ class Game.View extends Backbone.View
     @listenTo(setup, 'setupComplete', @renderGameboard)
 
   renderGameboard: ->
-    gameboard = new Board.View
+    gameboard = new Battleship.Board.View
       board: @board
 
     @contentElem().html(gameboard.render().$el)

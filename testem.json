@@ -11,13 +11,15 @@
     "app/lib/namespace.js",
     "app/lib/ejs_production.js",
     ".tmp/scripts/templates.js",
-    ".tmp/scripts/game/board_collection.js",
-    ".tmp/scripts/game/cell_model.js",
-    ".tmp/scripts/main.js",
-    ".tmp/scripts/router.js",
-    ".tmp/scripts/game/view.js",
-    ".tmp/scripts/setup/view.js",
-    ".tmp/scripts/board/view.js",
+    ".tmp/scripts/battleship/board/cell/model.js",
+    ".tmp/scripts/battleship/board/collection.js",
+    ".tmp/scripts/battleship/board/row/view.js",
+    ".tmp/scripts/battleship/board/cell/view.js",
+    ".tmp/scripts/battleship/setup/view.js",
+    ".tmp/scripts/battleship/game/view.js",
+    ".tmp/scripts/battleship/board/view.js",
+    ".tmp/scripts/battleship/router.js",
+    ".tmp/scripts/battleship/main.js",
     ".tmp/spec/**/*.js"
   ]
 }
