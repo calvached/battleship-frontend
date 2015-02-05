@@ -60,12 +60,12 @@ module.exports = function (grunt) {
             },
             jst: {
                 files: [
-                    '<%= yeoman.app %>/scripts/main/*.ejs'
+                    '<%= yeoman.app %>/scripts/**/*.ejs'
                 ],
                 tasks: ['jst']
             },
             test: {
-                files: ['<%= yeoman.app %>/scripts/{,*/}*.js', 'test/spec/**/*.js'],
+                files: ['<%= yeoman.app %>/scripts/{,*/}*.js', 'test/spec/{,*/}*.js'],
                 tasks: ['test:true']
             }
         },
@@ -149,7 +149,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%= yeoman.app %>/scripts',
-                    src: '{,*/}*.coffee',
+                    src: '**/**/*.coffee',
                     dest: '.tmp/scripts',
                     ext: '.js'
                 }]
@@ -158,7 +158,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: 'test/spec/',
-                    src: '{,*/}*.coffee',
+                    src: '**/**/*.coffee',
                     dest: '.tmp/spec',
                     ext: '.js'
                 }]

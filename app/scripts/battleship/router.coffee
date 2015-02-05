@@ -10,7 +10,7 @@ class App.Router extends Backbone.Router
   container: $("[data-id=container]")
 
   defaultRoute: ->
-    @container.html(new Game.View().render().el)
+    @container.html(new Battleship.Game.View().render().el)
 
   #makeModel: ->
   #  oneTest = new Board.Current

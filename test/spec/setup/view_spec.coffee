@@ -1,10 +1,10 @@
-describe 'Setup.View', ->
+describe 'Battleship.Setup.View', ->
   fakeServer = null
 
   renderSetup = ->
-    _v = new Setup.View
+    _v = new Battleship.Setup.View
       errorElem: $('<div data-id=error-message></div>')
-      board: new Game.BoardCollection
+      board: new Battleship.Board.Collection
     _v.render()
     _v
 
