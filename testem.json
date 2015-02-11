@@ -15,6 +15,7 @@
     ".tmp/scripts/battleship/board/collection.js",
     ".tmp/scripts/battleship/board/row/view.js",
     ".tmp/scripts/battleship/board/cell/view.js",
+    ".tmp/scripts/battleship/outcome/view.js",
     ".tmp/scripts/battleship/setup/view.js",
     ".tmp/scripts/battleship/game/view.js",
     ".tmp/scripts/battleship/board/view.js",
