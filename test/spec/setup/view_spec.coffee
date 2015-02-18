@@ -3,7 +3,7 @@ describe 'Battleship.Setup.View', ->
 
   renderSetup = ->
     _v = new Battleship.Setup.View
-      errorElem: $('<div data-id=error-message></div>')
+      msgElem: $('<div data-id=message-content></div>')
       board: new Battleship.Board.Collection
     _v.render()
     _v
@@ -36,7 +36,7 @@ describe 'Battleship.Setup.View', ->
     view.$('[data-id=play-button]').click()
     fakeServer.respond()
 
-    expect(view.options.errorElem.html()).toContain('Not Found')
+    expect(view.options.msgElem.html()).toContain('Not Found')
 
   it 'throws an error message on an invalid post', ->
     fakeServer.respondWith('POST', 'http://localhost:9393/new', [400, { "Content-Type": "application/json" }, JSON.stringify(errorPostData())])
@@ -46,10 +46,12 @@ describe 'Battleship.Setup.View', ->
     view.$('[data-id=play-button]').click()
     fakeServer.respond()
 
-    expect(view.options.errorElem.html()).toContain(errorPostData())
+    expect(view.options.msgElem.html()).toContain(errorPostData())
 
-  it 'clears the error message after 3 seconds', ->
+  it 'displays an error message for 3 seconds', ->
     jasmine.Clock.useMock()
+    slideDownSpy = spyOn($.fn, 'slideDown')
+    slideUpSpy = spyOn($.fn, 'slideUp')
     fakeServer.respondWith('POST', 'http://localhost:9393/new', [400, { "Content-Type": "application/json" }, JSON.stringify(errorPostData())])
 
     view = renderSetup()
@@ -58,11 +60,11 @@ describe 'Battleship.Setup.View', ->
     view.$('[data-id=play-button]').click()
     fakeServer.respond()
 
-    expect(view.options.errorElem.html()).toContain(errorPostData())
+    expect(slideDownSpy).toHaveBeenCalled()
 
     jasmine.Clock.tick(3000)
 
-    expect(view.options.errorElem.is(':empty')).toBeTruthy()
+    expect(slideUpSpy).toHaveBeenCalled()
 
   it 'does not throw an error message if it does not exist', ->
     fakeServer.respondWith('POST', 'http://localhost:9393/new', [200, { "Content-Type": "application/json" }, JSON.stringify([])])
@@ -73,7 +75,7 @@ describe 'Battleship.Setup.View', ->
     view.$('[data-id=play-button]').click()
     fakeServer.respond()
 
-    expect(view.options.errorElem.is(':empty')).toBeTruthy()
+    expect(view.options.msgElem.is(':empty')).toBeTruthy()
 
   it 'executes a trigger', ->
     fakeListener = spyOn(Backbone, "View")

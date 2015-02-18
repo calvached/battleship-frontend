@@ -28,9 +28,9 @@ describe 'Battleship.Game.View', ->
 
     expect(boardSpy).toHaveBeenCalled()
 
-  it 'does not render an Outcome view if a gameOutcome does not exist', ->
+  it 'does not render a Message view if a gameOutcome does not exist', ->
     fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
-    outcomeListener = spyOn(Battleship.Outcome, "View").andReturn(new Backbone.View)
+    outcomeListener = spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View)
     fakeServer = sinon.fakeServer.create()
 
     fakeServer.respondWith(
@@ -51,9 +51,9 @@ describe 'Battleship.Game.View', ->
 
     fakeServer.restore()
 
-  it 'renders an Outcome view if a gameOutcome exists', ->
+  it 'renders a Message view if a gameOutcome exists', ->
     fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
-    outcomeListener = spyOn(Battleship.Outcome, "View").andReturn(new Backbone.View)
+    outcomeListener = spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View)
     fakeServer = sinon.fakeServer.create()
 
     fakeServer.respondWith(
@@ -62,7 +62,7 @@ describe 'Battleship.Game.View', ->
       [
         200,
         { "content-type": "application/json" },
-        JSON.stringify({ gameOutcome: 'You win' })
+        JSON.stringify({ gameOutcome: 'win' })
       ])
 
     view = renderGame()
@@ -74,9 +74,9 @@ describe 'Battleship.Game.View', ->
 
     fakeServer.restore()
 
-  it 'appends an Outcome view', ->
+  it 'prepends a Message view', ->
     fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
-    outcomeListener = spyOn(Battleship.Outcome, "View").andReturn(new Backbone.View({el: '<div>You win</div>'}))
+    spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View({el: '<div>You win</div>'}))
     fakeServer = sinon.fakeServer.create()
 
     fakeServer.respondWith(
@@ -85,7 +85,7 @@ describe 'Battleship.Game.View', ->
       [
         200,
         { "content-type": "application/json" },
-        JSON.stringify({ gameOutcome: 'You win' })
+        JSON.stringify({ gameOutcome: 'win' })
       ])
 
     view = renderGame()
@@ -93,6 +93,34 @@ describe 'Battleship.Game.View', ->
     fakeCollection().trigger('change')
     fakeServer.respond()
 
-    expect(view.$el.html()).toContain('You win')
+    expect(view.$el.html()).toContain('win')
 
     fakeServer.restore()
+
+  it 'displays the Message View for 3 seconds', ->
+    jasmine.Clock.useMock()
+    slideDownSpy = spyOn($.fn, 'slideDown')
+    slideUpSpy = spyOn($.fn, 'slideUp')
+    fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
+    spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View({el: '<div>You win</div>'}))
+    fakeServer = sinon.fakeServer.create()
+
+    fakeServer.respondWith(
+      'get',
+      'http://localhost:9393/game_outcome',
+      [
+        200,
+        { "content-type": "application/json" },
+        JSON.stringify({ gameOutcome: 'win' })
+      ])
+
+    view = renderGame()
+
+    fakeCollection().trigger('change')
+    fakeServer.respond()
+
+    expect(slideDownSpy).toHaveBeenCalled()
+
+    jasmine.Clock.tick(3000)
+
+    expect(slideUpSpy).toHaveBeenCalled()

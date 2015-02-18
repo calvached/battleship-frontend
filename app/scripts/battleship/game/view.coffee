@@ -3,9 +3,15 @@ namespace('Battleship.Game')
 class Battleship.Game.View extends Backbone.View
   template: JST['app/scripts/battleship/game/view_template.ejs']
 
+  winMessage: 'You win!'
+
+  loseMessage: 'You lose!'
+
+  errorDuration: 3000
+
   contentElem: -> @$('[data-id=content]')
 
-  errorElem: -> @$('[data-id=error-message]')
+  msgElem: -> @$('[data-id=message-content]')
 
   render: ->
     @$el.html(@template)
@@ -16,7 +22,7 @@ class Battleship.Game.View extends Backbone.View
 
   renderSetup: ->
     setup = new Battleship.Setup.View
-      errorElem: @errorElem()
+      msgElem: @msgElem()
       board: @board
 
     @contentElem().html(setup.render().$el)
@@ -43,5 +49,25 @@ class Battleship.Game.View extends Backbone.View
     console.log 'ERROR'
 
   renderOutcome: (response) ->
-    outcome = new Battleship.Outcome.View(response)
-    @contentElem().html(outcome.render().$el)
+    if @isWin(response)
+      @renderFlashMessage(@winMessage, response.gameOutcome)
+    else
+      @renderFlashMessage(@loseMessage, response.gameOutcome)
+
+  isWin: (response) =>
+    response.gameOutcome == 'win'
+
+  renderFlashMessage: (message, styleType) ->
+    messageView = new Battleship.FlashMessage.View
+      message: message
+      styleType: styleType
+
+    @msgElem().prepend(messageView.render().$el)
+    @msgElem().slideDown('slow')
+    setTimeout(@hideElem, @errorDuration)
+
+  hideElem: =>
+    @msgElem().slideUp('slow', @clearElem)
+
+  clearElem: =>
+    @msgElem().html('')

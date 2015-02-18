@@ -2,6 +2,9 @@ $hit-color: red;
 $miss-color: #E3E3E3;
 $clickable-color: #8EBCFF;
 $cell-border-color: #FFFFFF;
+$win-color: #19A3FF;
+$lose-color: #D11919;
+$error-color: #D11919;
 
 body {
     background: #fafafa;
@@ -37,8 +40,26 @@ body {
   color: red;
 }
 
-.error-message {
+.message-content {
+  display: none;
 }
 
-.invalid-input-message {
+.message {
+  width: 100%;
+  height: 20%;
+  color: white;
+  text-align: center;
+  padding-top: 1%;
+}
+
+.lose {
+  background-color: $lose-color;
+}
+
+.win {
+  background-color: $win-color;
+}
+
+.error {
+  background-color: $error-color;
 }
