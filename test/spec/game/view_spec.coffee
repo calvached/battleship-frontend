@@ -124,3 +124,31 @@ describe 'Battleship.Game.View', ->
     jasmine.Clock.tick(3000)
 
     expect(slideUpSpy).toHaveBeenCalled()
+
+  it 'disables the gameboard after the game ends', ->
+    disableSpy = spyOn($.fn, 'off')
+    setupSpy = spyOn(Battleship.Setup, "View").andReturn(new Backbone.View())
+    spyOn(Battleship.Board, "View").andReturn(new Backbone.View({el: '<table><tr><td>Cell 1</td></tr></table>'}))
+    fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
+    spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View({el: '<div>You win</div>'}))
+    fakeServer = sinon.fakeServer.create()
+
+    fakeServer.respondWith(
+      'get',
+      'http://localhost:9393/game_outcome',
+      [
+        200,
+        { "content-type": "application/json" },
+        JSON.stringify({ gameOutcome: 'win' })
+      ])
+
+    view = renderGame()
+
+    setupSpy().trigger('setupComplete')
+
+    expect(disableSpy).not.toHaveBeenCalled()
+
+    fakeCollection().trigger('change')
+    fakeServer.respond()
+
+    expect(disableSpy).toHaveBeenCalled()

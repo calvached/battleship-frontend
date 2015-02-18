@@ -44,6 +44,7 @@ class Battleship.Game.View extends Backbone.View
   successCallback: (response) =>
     if response.gameOutcome
       @renderOutcome(response)
+      @disableGameboard()
 
   errorCallback: =>
     console.log 'ERROR'
@@ -53,6 +54,9 @@ class Battleship.Game.View extends Backbone.View
       @renderFlashMessage(@winMessage, response.gameOutcome)
     else
       @renderFlashMessage(@loseMessage, response.gameOutcome)
+
+  disableGameboard: ->
+    @$('table td').off()
 
   isWin: (response) =>
     response.gameOutcome == 'win'
