@@ -125,6 +125,8 @@ describe 'Battleship.Game.View', ->
 
     expect(slideUpSpy).toHaveBeenCalled()
 
+    fakeServer.restore()
+
   it 'disables the gameboard after the game ends', ->
     disableSpy = spyOn($.fn, 'off')
     setupSpy = spyOn(Battleship.Setup, "View").andReturn(new Backbone.View())
@@ -152,3 +154,83 @@ describe 'Battleship.Game.View', ->
     fakeServer.respond()
 
     expect(disableSpy).toHaveBeenCalled()
+
+    fakeServer.restore()
+
+  it "renders a 'Play Again' button when the game has ended", ->
+    spyOn(Battleship.Setup, "View").andReturn(new Backbone.View())
+    fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
+    playListener = spyOn(Battleship.PlayAgainButton, "View").andReturn(new Backbone.View({el: '<div>Play Again?</div>'}))
+    spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View)
+    fakeServer = sinon.fakeServer.create()
+
+    fakeServer.respondWith(
+      'get',
+      'http://localhost:9393/game_outcome',
+      [
+        200,
+        { "content-type": "application/json" },
+        JSON.stringify({ gameOutcome: 'win' })
+      ])
+
+    view = renderGame()
+
+    fakeCollection().trigger('change')
+    fakeServer.respond()
+
+    expect(playListener).toHaveBeenCalled()
+
+    fakeServer.restore()
+
+
+  it "appends a 'Play Again' button when the game has ended", ->
+    spyOn(Battleship.Setup, "View").andReturn(new Backbone.View())
+    fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
+    spyOn(Battleship.PlayAgainButton, "View").andReturn(new Backbone.View({el: '<div>Play Again?</div>'}))
+    spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View())
+    fakeServer = sinon.fakeServer.create()
+
+    fakeServer.respondWith(
+      'get',
+      'http://localhost:9393/game_outcome',
+      [
+        200,
+        { "content-type": "application/json" },
+        JSON.stringify({ gameOutcome: 'win' })
+      ])
+
+    view = renderGame()
+
+    fakeCollection().trigger('change')
+    fakeServer.respond()
+
+    expect(view.$el.html()).toContain('Play Again?')
+
+    fakeServer.restore()
+
+  it "re-renders a board on a successful trigger", ->
+    spyOn(Battleship.Setup, "View").andReturn(new Backbone.View())
+    boardSpy = spyOn(Battleship.Board, "View").andReturn(new Backbone.View())
+    fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
+    playListener = spyOn(Battleship.PlayAgainButton, "View").andReturn(new Backbone.View())
+    spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View())
+    fakeServer = sinon.fakeServer.create()
+    fakeServer.respondWith(
+      'get',
+      'http://localhost:9393/game_outcome',
+      [
+        200,
+        { "content-type": "application/json" },
+        JSON.stringify({ gameOutcome: 'win' })
+      ])
+
+    view = renderGame()
+
+    fakeCollection().trigger('change')
+    fakeServer.respond()
+
+    playListener().trigger('playAgain')
+
+    expect(boardSpy).toHaveBeenCalled()
+
+    fakeServer.restore()

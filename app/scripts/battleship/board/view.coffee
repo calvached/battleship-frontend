@@ -16,10 +16,9 @@ class Battleship.Board.View extends Backbone.View
 
   appendRows: ->
     boardDimension = Math.sqrt(@board().length)
-    clonedBoard = _.extend({}, @board())
 
     _(boardDimension).times (rowIndex) =>
-      @gameboardElem().append(@createdRow(boardDimension, clonedBoard).render().$el)
+      @gameboardElem().append(@createdRow(boardDimension, @board()).render().$el)
 
   createdRow: (boardDimension, board) ->
     new Battleship.Board.Row.View
