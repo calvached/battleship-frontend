@@ -31,6 +31,7 @@ class Battleship.Game.View extends Backbone.View
   renderBoard: ->
     gameboard = new Battleship.Board.View
       board: @board
+      msgElem: @msgElem()
 
     @contentElem().html(gameboard.render().$el)
 

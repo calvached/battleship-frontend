@@ -10,6 +10,8 @@ class Battleship.Board.View extends Backbone.View
 
   board: -> @options.board
 
+  msgElem: -> @options.msgElem
+
   gameboardElem: -> @$("[data-id=gameboard]")
 
   appendRows: ->
@@ -22,6 +24,7 @@ class Battleship.Board.View extends Backbone.View
   createdRow: (boardDimension, board) ->
     new Battleship.Board.Row.View
       row: @sliceIntoRowCells(boardDimension, board.models)
+      msgElem: @msgElem()
 
   sliceIntoRowCells: (boardDimension, boardCells) =>
     row = []

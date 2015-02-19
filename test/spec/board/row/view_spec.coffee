@@ -8,6 +8,7 @@ describe 'Battleship.Board.Row.View', ->
         new Battleship.Board.Cell.Model({id: 4}),
         new Battleship.Board.Cell.Model({id: 5})
       ]
+      msgElem: '<div></div>'
     _v.render()
     _v
 
