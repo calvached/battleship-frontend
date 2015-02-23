@@ -29,7 +29,7 @@ class Battleship.Setup.View extends Backbone.View
       error: @errorCallback
 
   successCallback: =>
-    @trigger('setupComplete')
+    @trigger('setupComplete', @boardSizeData())
 
   errorCallback: (_, response) =>
     @resetInput()
