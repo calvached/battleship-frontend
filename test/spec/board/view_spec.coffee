@@ -25,7 +25,6 @@ describe 'Battleship.Board.View', ->
   renderView = ->
     _v = new Battleship.Board.View
       board: mockGameboard()
-      msgElem: '<div></div>'
     _v.render()
     _v
 

@@ -12,11 +12,7 @@ class Battleship.Board.Cell.View extends Backbone.View
     @$el.html(@template(id: @cell().id))
     @
 
-  errorDuration: 3000
-
   cell: -> @options.cell
-
-  msgElem: -> @options.msgElem
 
   updateCell: ->
     @cell().fetch
@@ -28,25 +24,10 @@ class Battleship.Board.Cell.View extends Backbone.View
     @addStatusClass()
 
     if @cell().attributes.message
-      @renderFlashMessage(@cell().attributes.message, 'error')
+      Battleship.FlashMessage.Builder.showErrorMessage(@cell().attributes.message)
 
   errorCallback: =>
     console.log 'error'
 
   addStatusClass: ->
     @$("[data-id=#{@cell().id}]").addClass(@cell().attributes.status)
-
-  renderFlashMessage: (message, styleType) ->
-    messageView = new Battleship.FlashMessage.View
-      message: message
-      styleType: styleType
-
-    @msgElem().prepend(messageView.render().$el)
-    @msgElem().slideDown('slow')
-    setTimeout(@hideElem, @errorDuration)
-
-  hideElem: ->
-    @msgElem().slideUp('slow', @clearElem)
-
-  clearElem: ->
-    @msgElem().html('')
