@@ -1,14 +1,20 @@
 describe 'Battleship.Board.Cell.View', ->
+  fakeServer = null
+
   renderView = ->
     _v = new Battleship.Board.Cell.View
       cell: new Battleship.Board.Cell.Model({id: 1})
-      msgElem: '<div></div>'
     _v.render()
     _v
 
+  beforeEach ->
+    fakeServer = sinon.fakeServer.create()
+
+  afterEach ->
+    fakeServer.restore()
+
   describe 'when clicking', ->
     it "updates a cell class to 'hit'", ->
-      fakeServer = sinon.fakeServer.create()
       fakeServer.respondWith(
         'POST',
         'http://localhost:9393/board/1',
@@ -25,10 +31,8 @@ describe 'Battleship.Board.Cell.View', ->
       fakeServer.respond()
 
       expect(board.$('[data-id=1]').attr('class')).toContain('hit')
-      fakeServer.restore()
 
     it "updates a cell class to 'miss'", ->
-      fakeServer = sinon.fakeServer.create()
       fakeServer.respondWith(
         'POST',
         'http://localhost:9393/board/1',
@@ -45,11 +49,9 @@ describe 'Battleship.Board.Cell.View', ->
       fakeServer.respond()
 
       expect(board.$('[data-id=1]').attr('class')).toContain('miss')
-      fakeServer.restore()
 
     it "renders a Flash Message when a cell contains the attribute of 'message'", ->
-      messageSpy = spyOn(Battleship.FlashMessage, 'View').andReturn(new Backbone.View)
-      fakeServer = sinon.fakeServer.create()
+      messageSpy = spyOn(Battleship.FlashMessage.Builder, 'showErrorMessage')
       fakeServer.respondWith(
         'POST',
         'http://localhost:9393/board/1',

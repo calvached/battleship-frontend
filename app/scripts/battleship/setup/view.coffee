@@ -10,18 +10,12 @@ class Battleship.Setup.View extends Backbone.View
     @$el.html(@template())
     @
 
-  errorDuration: 3000
-
-  msgElem: -> @options.msgElem
-
   board: -> @options.board
 
   boardSizeData: ->
     board_size: @$('[data-id=board-size]').val()
 
   submitBoardSize: (boardSize) ->
-    @clearElem()
-
     @board().fetch
       data: @boardSizeData()
       type: 'POST'
@@ -35,24 +29,9 @@ class Battleship.Setup.View extends Backbone.View
     @resetInput()
 
     if response.responseText
-      @renderFlashMessage(response.responseText, 'error')
+      Battleship.FlashMessage.Builder.showErrorMessage(response.responseText)
     else
-      @renderFlashMessage(response.statusText, 'error')
+      Battleship.FlashMessage.Builder.showErrorMessage(response.statusText)
 
   resetInput: ->
     @$('[data-id=board-size]').val("")
-
-  renderFlashMessage: (message, styleType) ->
-    messageView = new Battleship.FlashMessage.View
-      message: message
-      styleType: styleType
-
-    @msgElem().append(messageView.render().$el)
-    @msgElem().slideDown('slow')
-    setTimeout(@hideElem, @errorDuration)
-
-  hideElem: =>
-    @msgElem().slideUp('slow', @clearElem)
-
-  clearElem: =>
-    @msgElem().html('')

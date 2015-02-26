@@ -2,10 +2,12 @@
   "name": "battleship",
   "version": "0.0.0",
   "dependencies": {
+    "jasmine-jquery": "~1.5.8",
     "jquery": "~2.1.0",
     "lodash": "~2.4.1",
     "backbone": "~1.0.0",
-    "modernizr": "~2.7.1"
+    "modernizr": "~2.7.1",
+    "underscore": "~1.8.2"
   },
   "devDependencies": {
     "sinonjs": "~1.9.0"

@@ -1,8 +1,16 @@
 describe 'Battleship.Game.View', ->
+  fakeServer = null
+
   renderGame = ->
     _v = new Battleship.Game.View
     _v.render()
     _v
+
+  beforeEach ->
+    fakeServer = sinon.fakeServer.create()
+
+  afterEach ->
+    fakeServer.restore()
 
   it 'renders a Setup view', ->
     setupSpy = spyOn(Battleship.Setup, "View").andReturn(new Backbone.View())
@@ -28,11 +36,10 @@ describe 'Battleship.Game.View', ->
 
     expect(boardSpy).toHaveBeenCalled()
 
-  it 'does not render a Message view if a gameOutcome does not exist', ->
+  it 'does not render a win or lose message if a gameOutcome does not exist', ->
     fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
-    outcomeListener = spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View)
-    fakeServer = sinon.fakeServer.create()
-
+    winListener = spyOn(Battleship.FlashMessage.Builder, "showWinMessage")
+    loseListener = spyOn(Battleship.FlashMessage.Builder, "showLoseMessage")
     fakeServer.respondWith(
       'get',
       'http://localhost:9393/game_outcome',
@@ -47,15 +54,12 @@ describe 'Battleship.Game.View', ->
     fakeCollection().trigger('change')
     fakeServer.respond()
 
-    expect(outcomeListener).not.toHaveBeenCalled()
+    expect(winListener).not.toHaveBeenCalled()
+    expect(loseListener).not.toHaveBeenCalled()
 
-    fakeServer.restore()
-
-  it 'renders a Message view if a gameOutcome exists', ->
+  it 'renders a win Message view if a win gameOutcome exists', ->
     fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
-    outcomeListener = spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View)
-    fakeServer = sinon.fakeServer.create()
-
+    winListener = spyOn(Battleship.FlashMessage.Builder, "showWinMessage")
     fakeServer.respondWith(
       'get',
       'http://localhost:9393/game_outcome',
@@ -70,22 +74,18 @@ describe 'Battleship.Game.View', ->
     fakeCollection().trigger('change')
     fakeServer.respond()
 
-    expect(outcomeListener).toHaveBeenCalled()
+    expect(winListener).toHaveBeenCalled()
 
-    fakeServer.restore()
-
-  it 'prepends a Message view', ->
+  it 'renders a lose Message view if a lose gameOutcome exists', ->
     fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
-    spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View({el: '<div>You win</div>'}))
-    fakeServer = sinon.fakeServer.create()
-
+    loseListener = spyOn(Battleship.FlashMessage.Builder, "showLoseMessage")
     fakeServer.respondWith(
       'get',
       'http://localhost:9393/game_outcome',
       [
         200,
         { "content-type": "application/json" },
-        JSON.stringify({ gameOutcome: 'win' })
+        JSON.stringify({ gameOutcome: 'lose' })
       ])
 
     view = renderGame()
@@ -93,48 +93,13 @@ describe 'Battleship.Game.View', ->
     fakeCollection().trigger('change')
     fakeServer.respond()
 
-    expect(view.$el.html()).toContain('win')
-
-    fakeServer.restore()
-
-  it 'displays the Message View for 3 seconds', ->
-    jasmine.Clock.useMock()
-    slideDownSpy = spyOn($.fn, 'slideDown')
-    slideUpSpy = spyOn($.fn, 'slideUp')
-    fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
-    spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View({el: '<div>You win</div>'}))
-    fakeServer = sinon.fakeServer.create()
-
-    fakeServer.respondWith(
-      'get',
-      'http://localhost:9393/game_outcome',
-      [
-        200,
-        { "content-type": "application/json" },
-        JSON.stringify({ gameOutcome: 'win' })
-      ])
-
-    view = renderGame()
-
-    fakeCollection().trigger('change')
-    fakeServer.respond()
-
-    expect(slideDownSpy).toHaveBeenCalled()
-
-    jasmine.Clock.tick(3000)
-
-    expect(slideUpSpy).toHaveBeenCalled()
-
-    fakeServer.restore()
+    expect(loseListener).toHaveBeenCalled()
 
   it 'disables the gameboard after the game ends', ->
     disableSpy = spyOn($.fn, 'off')
     setupSpy = spyOn(Battleship.Setup, "View").andReturn(new Backbone.View())
     spyOn(Battleship.Board, "View").andReturn(new Backbone.View({el: '<table><tr><td>Cell 1</td></tr></table>'}))
     fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
-    spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View({el: '<div>You win</div>'}))
-    fakeServer = sinon.fakeServer.create()
-
     fakeServer.respondWith(
       'get',
       'http://localhost:9393/game_outcome',
@@ -155,15 +120,10 @@ describe 'Battleship.Game.View', ->
 
     expect(disableSpy).toHaveBeenCalled()
 
-    fakeServer.restore()
-
   it "renders a 'Play Again' button when the game has ended", ->
     spyOn(Battleship.Setup, "View").andReturn(new Backbone.View())
     fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
     playListener = spyOn(Battleship.PlayAgainButton, "View").andReturn(new Backbone.View({el: '<div>Play Again?</div>'}))
-    spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View)
-    fakeServer = sinon.fakeServer.create()
-
     fakeServer.respondWith(
       'get',
       'http://localhost:9393/game_outcome',
@@ -180,16 +140,10 @@ describe 'Battleship.Game.View', ->
 
     expect(playListener).toHaveBeenCalled()
 
-    fakeServer.restore()
-
-
   it "appends a 'Play Again' button when the game has ended", ->
     spyOn(Battleship.Setup, "View").andReturn(new Backbone.View())
     fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
     spyOn(Battleship.PlayAgainButton, "View").andReturn(new Backbone.View({el: '<div>Play Again?</div>'}))
-    spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View())
-    fakeServer = sinon.fakeServer.create()
-
     fakeServer.respondWith(
       'get',
       'http://localhost:9393/game_outcome',
@@ -206,15 +160,11 @@ describe 'Battleship.Game.View', ->
 
     expect(view.$el.html()).toContain('Play Again?')
 
-    fakeServer.restore()
-
   it "re-renders a board on a successful trigger", ->
     spyOn(Battleship.Setup, "View").andReturn(new Backbone.View())
     boardSpy = spyOn(Battleship.Board, "View").andReturn(new Backbone.View())
     fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
     playListener = spyOn(Battleship.PlayAgainButton, "View").andReturn(new Backbone.View())
-    spyOn(Battleship.FlashMessage, "View").andReturn(new Backbone.View())
-    fakeServer = sinon.fakeServer.create()
     fakeServer.respondWith(
       'get',
       'http://localhost:9393/game_outcome',
@@ -232,5 +182,3 @@ describe 'Battleship.Game.View', ->
     playListener().trigger('playAgain')
 
     expect(boardSpy).toHaveBeenCalled()
-
-    fakeServer.restore()
