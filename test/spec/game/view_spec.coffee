@@ -38,8 +38,8 @@ describe 'Battleship.Game.View', ->
 
   it 'does not render a win or lose message if a gameOutcome does not exist', ->
     fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
-    winListener = spyOn(Battleship.FlashMessage.Builder, "showWinMessage")
-    loseListener = spyOn(Battleship.FlashMessage.Builder, "showLoseMessage")
+    winListener = spyOn(FlashMessage.Handler, "showWinMessage")
+    loseListener = spyOn(FlashMessage.Handler, "showLoseMessage")
     fakeServer.respondWith(
       'get',
       'http://localhost:9393/game_outcome',
@@ -59,7 +59,7 @@ describe 'Battleship.Game.View', ->
 
   it 'renders a win Message view if a win gameOutcome exists', ->
     fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
-    winListener = spyOn(Battleship.FlashMessage.Builder, "showWinMessage")
+    winListener = spyOn(FlashMessage.Handler, "showWinMessage")
     fakeServer.respondWith(
       'get',
       'http://localhost:9393/game_outcome',
@@ -78,7 +78,7 @@ describe 'Battleship.Game.View', ->
 
   it 'renders a lose Message view if a lose gameOutcome exists', ->
     fakeCollection = spyOn(Battleship.Board, "Collection").andReturn(new Backbone.Collection())
-    loseListener = spyOn(Battleship.FlashMessage.Builder, "showLoseMessage")
+    loseListener = spyOn(FlashMessage.Handler, "showLoseMessage")
     fakeServer.respondWith(
       'get',
       'http://localhost:9393/game_outcome',

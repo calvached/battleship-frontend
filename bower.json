@@ -7,6 +7,7 @@
     "lodash": "~2.4.1",
     "backbone": "~1.0.0",
     "modernizr": "~2.7.1",
+    "fleet-flare": "1.0.3",
     "underscore": "~1.8.2"
   },
   "devDependencies": {

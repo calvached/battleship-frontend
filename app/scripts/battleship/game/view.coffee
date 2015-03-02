@@ -54,9 +54,9 @@ class Battleship.Game.View extends Backbone.View
 
   renderOutcome: (response) ->
     if @isWin(response)
-      Battleship.FlashMessage.Builder.showWinMessage()
+      FlashMessage.Handler.showWinMessage()
     else
-      Battleship.FlashMessage.Builder.showLoseMessage()
+      FlashMessage.Handler.showLoseMessage()
 
   disableGameboard: ->
     @$('table td').off()

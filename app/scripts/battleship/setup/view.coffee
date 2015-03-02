@@ -29,9 +29,9 @@ class Battleship.Setup.View extends Backbone.View
     @resetInput()
 
     if response.responseText
-      Battleship.FlashMessage.Builder.showErrorMessage(response.responseText)
+      FlashMessage.Handler.showErrorMessage(response.responseText)
     else
-      Battleship.FlashMessage.Builder.showErrorMessage(response.statusText)
+      FlashMessage.Handler.showErrorMessage(response.statusText)
 
   resetInput: ->
     @$('[data-id=board-size]').val("")

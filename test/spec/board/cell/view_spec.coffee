@@ -51,7 +51,7 @@ describe 'Battleship.Board.Cell.View', ->
       expect(board.$('[data-id=1]').attr('class')).toContain('miss')
 
     it "renders a Flash Message when a cell contains the attribute of 'message'", ->
-      messageSpy = spyOn(Battleship.FlashMessage.Builder, 'showErrorMessage')
+      messageSpy = spyOn(FlashMessage.Handler, 'showErrorMessage')
       fakeServer.respondWith(
         'POST',
         'http://localhost:9393/board/1',

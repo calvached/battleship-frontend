@@ -24,7 +24,7 @@ class Battleship.Board.Cell.View extends Backbone.View
     @addStatusClass()
 
     if @cell().attributes.message
-      Battleship.FlashMessage.Builder.showErrorMessage(@cell().attributes.message)
+      FlashMessage.Handler.showErrorMessage(@cell().attributes.message)
 
   errorCallback: =>
     console.log 'error'

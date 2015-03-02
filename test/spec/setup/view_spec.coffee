@@ -29,7 +29,7 @@ describe 'Battleship.Setup.View', ->
     expect(postedData).toEqual('board_size=6')
 
   it 'throws an error on an unsuccessful post', ->
-    messageSpy = spyOn(Battleship.FlashMessage.Builder, 'showErrorMessage')
+    messageSpy = spyOn(FlashMessage.Handler, 'showErrorMessage')
     view = renderSetup()
 
     view.$('[data-id=board-size]').val('6')
@@ -39,7 +39,7 @@ describe 'Battleship.Setup.View', ->
     expect(messageSpy).toHaveBeenCalled()
 
   it 'throws an error message on an invalid post', ->
-    messageSpy = spyOn(Battleship.FlashMessage.Builder, 'showErrorMessage')
+    messageSpy = spyOn(FlashMessage.Handler, 'showErrorMessage')
     fakeServer.respondWith('POST', 'http://localhost:9393/new', [400, { "Content-Type": "application/json" }, JSON.stringify(errorPostData())])
     view = renderSetup()
 
@@ -50,7 +50,7 @@ describe 'Battleship.Setup.View', ->
     expect(messageSpy).toHaveBeenCalled()
 
   it 'does not throw an error message if it does not exist', ->
-    messageSpy = spyOn(Battleship.FlashMessage.Builder, 'showErrorMessage')
+    messageSpy = spyOn(FlashMessage.Handler, 'showErrorMessage')
     fakeServer.respondWith('POST', 'http://localhost:9393/new', [200, { "Content-Type": "application/json" }, JSON.stringify([])])
 
     view = renderSetup()
