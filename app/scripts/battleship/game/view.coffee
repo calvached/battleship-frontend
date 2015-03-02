@@ -36,21 +36,11 @@ class Battleship.Game.View extends Backbone.View
     if response.gameOutcome
       @renderOutcome(response)
       @disableGameboard()
+      @resetGameboard()
       @renderPlayAgainButton()
 
   errorCallback: =>
     console.log 'ERROR'
-
-  renderPlayAgainButton: =>
-    @board = new Battleship.Board.Collection
-    @board.bind('change', @getGameOutcome)
-
-    playButton = new Battleship.PlayAgainButton.View
-      boardDimension: @boardDimension
-      board: @board
-
-    @contentElem().append(playButton.render().$el)
-    @listenTo(playButton, 'playAgain', @renderBoard)
 
   renderOutcome: (response) ->
     if @isWin(response)
@@ -60,6 +50,17 @@ class Battleship.Game.View extends Backbone.View
 
   disableGameboard: ->
     @$('table td').off()
+
+  resetGameboard: ->
+    @board.reset()
+
+  renderPlayAgainButton: =>
+    playButton = new Battleship.PlayAgainButton.View
+      boardDimension: @boardDimension
+      board: @board
+
+    @contentElem().append(playButton.render().$el)
+    @listenTo(playButton, 'playAgain', @renderBoard)
 
   isWin: (response) =>
     response.gameOutcome == 'win'

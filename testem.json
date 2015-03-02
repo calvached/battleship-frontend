@@ -3,8 +3,8 @@
   "launch_in_ci": ["PhantomJS"],
   "before_tests": "grunt testForReal",
   "src_files": [
-    "app/bower_components/underscore/underscore.js",
     "app/bower_components/jquery/dist/jquery.js",
+    "app/bower_components/underscore/underscore.js",
     "app/bower_components/fleet-flare/dist/fleet_flare.min.js",
     "app/bower_components/backbone/backbone.js",
     "app/bower_components/jasmine-jquery/lib/jasmine-jquery.js",
