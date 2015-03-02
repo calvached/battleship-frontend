@@ -14,19 +14,21 @@ class Battleship.Board.View extends Backbone.View
 
   appendRows: ->
     boardDimension = Math.sqrt(@board().length)
+    rows =  @sliceIntoRows(boardDimension, @board().models)
 
-    _(boardDimension).times (rowIndex) =>
-      @gameboardElem().append(@createdRow(boardDimension, @board()).render().$el)
+    _.each rows, (row) =>
+      @gameboardElem().append(@createRow(row).render().$el)
 
-  createdRow: (boardDimension, board) ->
+  createRow: (row) ->
     new Battleship.Board.Row.View
-      row: @sliceIntoRowCells(boardDimension, board.models)
+      row: row
 
-  sliceIntoRowCells: (boardDimension, boardCells) =>
+  sliceIntoRows: (size, boardCells) ->
     row = []
+    i = 0
 
-    _(boardDimension).times (cellIndex) =>
-      cell = boardCells.shift()
-      row.push(cell)
+    while i < boardCells.length
+      row.push(boardCells.slice(i, i + size))
+      i += size
 
     row
