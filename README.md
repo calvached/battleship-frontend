@@ -2,7 +2,6 @@
 An overly simplified version of Battleship created to help me get familiar with Coffeescript, Backbone, and Sinatra.
 
 ## Configuration
-<<<<<<< HEAD
 Execute  
 ```
 bower install && npm install
