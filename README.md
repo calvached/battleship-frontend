@@ -2,18 +2,24 @@
 An overly simplified version of Battleship created to help me get familiar with Coffeescript, Backbone, and Sinatra.
 
 ## Configuration
-Start the server:  
+Execute  
+```
+bower install && npm install
+```
+
+Then start the server:  
 ```
 grunt serve
 ```
 
 ## How to run the test suite
+Navigate to the root directory and execute:
 ```
 testem
 ```
 
 ## Usage Instructions
-[Coming Soon]
+Enter the size of the grid you want to play on from there you have ten (10) chances to sink a ship before you lose!
 
 ## Contributing
 1. Fork it
