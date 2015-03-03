@@ -36,7 +36,6 @@ class Battleship.Game.View extends Backbone.View
     if response.gameOutcome
       @renderOutcome(response)
       @disableGameboard()
-      @resetGameboard()
       @renderPlayAgainButton()
 
   errorCallback: =>
@@ -50,9 +49,6 @@ class Battleship.Game.View extends Backbone.View
 
   disableGameboard: ->
     @$('table td').off()
-
-  resetGameboard: ->
-    @board.reset()
 
   renderPlayAgainButton: =>
     playButton = new Battleship.PlayAgainButton.View
