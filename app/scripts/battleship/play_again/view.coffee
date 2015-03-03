@@ -17,6 +17,7 @@ class Battleship.PlayAgainButton.View extends Backbone.View
   replay: ->
     @board().fetch
       data: @boardDimension()
+      reset: true
       type: 'POST'
       error: @errorCallback
       success: @successCallback
